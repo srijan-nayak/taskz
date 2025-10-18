@@ -9,8 +9,38 @@ datasource db {
 }
 
 model User {
-  id       Int    @id @default(autoincrement())
+  id       String @id @default(cuid())
   email    String @unique
   name     String
   password String
+
+  createdOrgs Organization[]
+  memberships Membership[]
+}
+
+model Organization {
+  id          String   @id @default(cuid())
+  name        String
+  createdById String
+  createdAt   DateTime @default(now())
+
+  createdBy User         @relation(fields: [createdById], references: [id])
+  members   Membership[]
+}
+
+model Membership {
+  id             String @id @default(cuid())
+  userId         String
+  organizationId String
+  role           Role   @default(MEMBER)
+
+  user         User         @relation(fields: [userId], references: [id])
+  organization Organization @relation(fields: [organizationId], references: [id])
+
+  @@unique([userId, organizationId])
+}
+
+enum Role {
+  ADMIN
+  MEMBER
 }
