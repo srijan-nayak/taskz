@@ -72,7 +72,7 @@ export default function SignupForm() {
                 {state?.errors?.password && (
                   <FieldError>
                     Password must:
-                    <ul>
+                    <ul className="list-disc ps-4">
                       {state.errors.password.map((err) => (
                         <li key={err}>{err}</li>
                       ))}
