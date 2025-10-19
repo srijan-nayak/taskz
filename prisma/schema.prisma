@@ -41,6 +41,7 @@ model Membership {
 }
 
 enum Role {
+  OWNER
   ADMIN
   MEMBER
 }
