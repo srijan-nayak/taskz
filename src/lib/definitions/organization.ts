@@ -1,7 +1,11 @@
+import { Role } from "@/generated/prisma/enums";
 import { z } from "zod";
 
 export const OrganizationFormSchema = z.object({
-  name: z.string().min(2, { message: "Name must be more than 2 characters" }),
+  name: z
+    .string()
+    .min(2, { message: "Name must be more than 2 characters" })
+    .max(24, "Name cannot be more than 24 characters"),
   id: z.string().optional(),
 });
 
@@ -15,3 +19,10 @@ export type OrganizationFormState = {
   name?: string;
   id?: string;
 };
+
+export type OrgsList = {
+  id: string;
+  name: string;
+  ownerName: string;
+  role: Role;
+}[];

@@ -1,9 +1,11 @@
 "use server";
 
 import { Role } from "@/generated/prisma/enums";
+import { Result } from "@/lib/definitions/generic";
 import {
   OrganizationFormSchema,
   OrganizationFormState,
+  OrgsList,
 } from "@/lib/definitions/organization";
 import prisma from "@/lib/prisma";
 import { verifySession } from "@/lib/session";
@@ -84,5 +86,38 @@ export async function createOrganization(
       name: data.get("name")?.toString(),
       id: data.get("id")?.toString(),
     };
+  }
+}
+
+export async function getOrganizations(): Promise<Result<OrgsList, string>> {
+  const session = await verifySession();
+  if (!session) {
+    return redirect("/login");
+  }
+
+  const { userId } = session;
+
+  try {
+    const data = await prisma.organization.findMany({
+      where: { members: { some: { userId } } },
+      select: {
+        id: true,
+        name: true,
+        createdBy: { select: { name: true } },
+        members: { where: { userId }, select: { role: true } },
+      },
+    });
+
+    const orgList = data.map((r) => ({
+      id: r.id,
+      name: r.name,
+      ownerName: r.createdBy.name,
+      role: r.members[0]?.role || Role.MEMBER,
+    }));
+
+    return { ok: true, data: orgList };
+  } catch (err) {
+    console.log("Failed to query organizations", err);
+    return { ok: false, err: "Failed to query organizations" };
   }
 }

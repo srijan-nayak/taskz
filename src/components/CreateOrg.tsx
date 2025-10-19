@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/dialog";
 import OrganizationForm from "@/components/OrganizationForm";
 import { startTransition, useActionState, useEffect, useState } from "react";
-import { createOrganization } from "@/actions/organizatoin";
+import { createOrganization } from "@/actions/organization";
 
 export default function CreateOrg() {
   const [open, setOpen] = useState(false);
@@ -34,7 +34,7 @@ export default function CreateOrg() {
   return (
     <Dialog onOpenChange={setOpen} open={open}>
       <DialogTrigger asChild>
-        <Button>
+        <Button className="cursor-pointer">
           <CirclePlus /> <span>Create Organization</span>
         </Button>
       </DialogTrigger>
