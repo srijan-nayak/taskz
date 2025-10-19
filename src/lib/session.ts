@@ -1,6 +1,7 @@
-import "server-only";
+"use server"
+
 import { jwtVerify, SignJWT } from "jose";
-import { SessionPayload } from "./definitions/auth";
+import { SessionPayload } from "@/lib/definitions/auth";
 import { cookies } from "next/headers";
 
 const SESSION_SECRET = process.env.SESSION_SECRET || "";
@@ -47,4 +48,9 @@ export async function createSession(userId: string) {
     sameSite: "lax",
     path: "/",
   });
+}
+
+export async function verifySession() {
+  const token = (await cookies()).get("session")?.value || "";
+  return await decryptToken(token);
 }

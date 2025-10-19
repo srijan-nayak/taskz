@@ -1,3 +1,5 @@
+"use client";
+
 import {
   Sidebar,
   SidebarContent,
@@ -10,30 +12,33 @@ import {
 } from "@/components/ui/sidebar";
 import { Archive, Building2 } from "lucide-react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 export default function AppSidebar() {
+  const path = usePathname();
+
   const items = [
     {
       title: "Organizations",
-      url: "/app/organizations",
+      url: "/organizations",
       icon: Building2,
     },
     {
       title: "Invites",
-      url: "/app/invites",
+      url: "/invites",
       icon: Archive,
     },
   ];
 
   return (
-    <Sidebar>
+    <Sidebar variant="inset">
       <SidebarContent>
         <SidebarGroup>
           <SidebarGroupContent>
             <SidebarMenu>
               {items.map((item) => (
                 <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild>
+                  <SidebarMenuButton asChild isActive={path.includes(item.url)}>
                     <Link href={item.url}>
                       <item.icon />
                       <span>{item.title}</span>

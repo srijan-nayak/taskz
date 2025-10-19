@@ -66,7 +66,7 @@ export async function signup(
     };
   }
 
-  redirect("/app");
+  redirect("/organizations");
 }
 
 export async function login(
@@ -113,7 +113,7 @@ export async function login(
     };
   }
 
-  redirect("/app");
+  redirect("/organizations");
 }
 
 export async function getUserData() {
