@@ -1,9 +1,14 @@
 "use server";
 
-import { SignupFormSchema, SignupFormState } from "@/lib/definitions/auth";
+import {
+  LoginFormSchema,
+  LoginFormState,
+  SignupFormSchema,
+  SignupFormState,
+} from "@/lib/definitions/auth";
 import prisma from "@/lib/prisma";
 import { createSession } from "@/lib/session";
-import { hash } from "bcrypt";
+import { hash, compare } from "bcrypt";
 import { redirect } from "next/navigation";
 import { z } from "zod";
 
@@ -56,6 +61,55 @@ export async function signup(
     console.error("Failed to signup user", err);
     return {
       message: "Signup failed! Please try again later",
+      name,
+      email,
+    };
+  }
+
+  redirect("/app");
+}
+
+export async function login(
+  state: LoginFormState,
+  data: FormData
+): Promise<LoginFormState> {
+  const validatedFields = LoginFormSchema.safeParse({
+    email: data.get("email"),
+    password: data.get("password"),
+  });
+
+  if (!validatedFields.success) {
+    return {
+      errors: z.flattenError(validatedFields.error).fieldErrors,
+      email: data.get("email")?.toString(),
+    };
+  }
+
+  const { email, password } = validatedFields.data;
+
+  try {
+    const user = await prisma.user.findUnique({ where: { email } });
+    if (!user) {
+      return {
+        email,
+        message: "Invalid credentials",
+      };
+    }
+
+    const areValidCredentials = await compare(password + PEPPER, user.password);
+    if (!areValidCredentials) {
+      return {
+        email,
+        message: "Invalid credentials",
+      };
+    }
+
+    await createSession(user.id);
+  } catch (err) {
+    console.error("Failed to authenticate user", err);
+    return {
+      message: "Login failed! Please try again later",
+      email,
     };
   }
 

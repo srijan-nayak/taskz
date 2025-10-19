@@ -36,6 +36,20 @@ export type SignupFormState = {
   email?: string;
 } | null;
 
+export const LoginFormSchema = z.object({
+  email: z.email({ message: "Please enter a valid email" }),
+  password: z.string().min(1, { message: "Password can't be blank" }),
+});
+
+export type LoginFormState = {
+  errors?: {
+    email?: string[];
+    password?: string[];
+  };
+  message?: string;
+  email?: string;
+} | null;
+
 export type SessionPayload = JWTPayload & {
   userId: string;
   expiresAt: string;
