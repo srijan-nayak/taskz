@@ -7,7 +7,7 @@ import { Result } from "@/lib/definitions/generic";
 import { LogOut } from "lucide-react";
 import { use, useActionState } from "react";
 
-export default function LogoutButton({
+export default function UserLogoutButton({
   userDataPromise,
 }: {
   userDataPromise: Promise<Result<UserDetails, string>>;

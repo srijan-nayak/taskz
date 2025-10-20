@@ -1,10 +1,17 @@
+"use server";
+
+import { InviteStatus } from "@/generated/prisma/enums";
 import { isAdmin } from "@/lib/authorizatin";
+import { Result } from "@/lib/definitions/generic";
 import {
   InviteMemberFormState,
   InviteMemberFormSchema,
+  InvitesList,
+  InviteActionSchema,
 } from "@/lib/definitions/invitations";
 import prisma from "@/lib/prisma";
 import { verifySession, clearSession } from "@/lib/session";
+import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { z } from "zod";
 
@@ -69,4 +76,90 @@ export async function inviteMember(
   }
 
   return { success: true };
+}
+
+export async function getUserInvitations(): Promise<
+  Result<InvitesList, string>
+> {
+  const session = await verifySession();
+  if (!session) {
+    redirect("/login");
+  }
+
+  const { userId } = session;
+
+  try {
+    const invites = await prisma.invitations.findMany({
+      where: { userId },
+      select: {
+        organization: {
+          select: {
+            id: true,
+            name: true,
+            createdBy: { select: { name: true } },
+          },
+        },
+        status: true,
+      },
+      orderBy: { createdAt: "asc" },
+    });
+
+    const data: InvitesList = invites.map((r) => ({
+      id: r.organization.id,
+      orgName: r.organization.name,
+      orgOwnerName: r.organization.createdBy.name,
+      status: r.status,
+    }));
+
+    return { ok: true, data };
+  } catch (err) {
+    console.error("Failed to fetch user's invitations", err);
+    return { ok: false, err: "Failed to fetch user's invitations" };
+  }
+}
+
+export async function acceptInvite(
+  _state: null,
+  data: FormData
+): Promise<null> {
+  const session = await verifySession();
+  if (!session) {
+    redirect("/login");
+  }
+  const { userId } = session;
+
+  const validatedFields = InviteActionSchema.safeParse({
+    orgId: data.get("org-id"),
+  });
+  if (!validatedFields.success) {
+    return null;
+  }
+
+  const { orgId } = validatedFields.data;
+
+  try {
+    await prisma.$transaction(async () => {
+      await prisma.invitations.update({
+        where: {
+          userId_organizationId: {
+            userId,
+            organizationId: orgId,
+          },
+        },
+        data: { status: InviteStatus.ACCEPTED },
+      });
+
+      await prisma.membership.create({
+        data: {
+          userId,
+          organizationId: orgId,
+        },
+      });
+    });
+    revalidatePath(`/home/invites`);
+  } catch (err) {
+    console.error("Failed to accept invite", err);
+  }
+
+  return null;
 }

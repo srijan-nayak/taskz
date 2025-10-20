@@ -20,4 +20,8 @@ export type InvitesList = {
   orgName: string;
   orgOwnerName: string;
   status: InviteStatus;
-};
+}[];
+
+export const InviteActionSchema = z.object({
+  orgId: z.string(),
+});

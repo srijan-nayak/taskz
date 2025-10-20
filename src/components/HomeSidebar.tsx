@@ -13,7 +13,7 @@ import {
 import { Archive, Building2 } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import LogoutButton from "./LogoutButton";
+import UserLogoutButton from "./UserLogoutButton";
 import { UserDetails } from "@/lib/definitions/auth";
 import { Result } from "@/lib/definitions/generic";
 
@@ -61,7 +61,7 @@ export default function HomeSidebar({
         </SidebarGroup>
       </SidebarContent>
       <SidebarFooter>
-        <LogoutButton userDataPromise={userDataPromise} />
+        <UserLogoutButton userDataPromise={userDataPromise} />
       </SidebarFooter>
     </Sidebar>
   );
