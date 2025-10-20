@@ -7,8 +7,7 @@ import {
   EmptyMedia,
   EmptyTitle,
 } from "@/components/ui/empty";
-import { Button } from "@/components/ui/button";
-import { Check, MailIcon, X } from "lucide-react";
+import { MailIcon } from "lucide-react";
 import {
   Table,
   TableBody,

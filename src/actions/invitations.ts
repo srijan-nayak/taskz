@@ -163,3 +163,41 @@ export async function acceptInvite(
 
   return null;
 }
+
+export async function rejectInvite(
+  _state: null,
+  data: FormData
+): Promise<null> {
+  const session = await verifySession();
+  if (!session) {
+    redirect("/login");
+  }
+  const { userId } = session;
+
+  const validatedFields = InviteActionSchema.safeParse({
+    orgId: data.get("org-id"),
+  });
+  if (!validatedFields.success) {
+    return null;
+  }
+
+  const { orgId } = validatedFields.data;
+
+  try {
+    await prisma.invitations.update({
+      where: {
+        userId_organizationId: {
+          userId,
+          organizationId: orgId,
+        },
+      },
+      data: { status: InviteStatus.REJECTED },
+    });
+
+    revalidatePath(`/home/invites`);
+  } catch (err) {
+    console.error("Failed to reject invite", err);
+  }
+
+  return null;
+}
