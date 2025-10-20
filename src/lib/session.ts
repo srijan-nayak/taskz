@@ -1,4 +1,4 @@
-"use server"
+"use server";
 
 import { jwtVerify, SignJWT } from "jose";
 import { SessionPayload } from "@/lib/definitions/auth";
@@ -53,4 +53,9 @@ export async function createSession(userId: string) {
 export async function verifySession() {
   const token = (await cookies()).get("session")?.value || "";
   return await decryptToken(token);
+}
+
+export async function clearSession() {
+  const cookieStore = await cookies();
+  cookieStore.delete("session");
 }

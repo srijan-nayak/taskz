@@ -13,7 +13,7 @@ export default async function middleware(req: NextRequest) {
   }
 
   if (!isProtectedRoute && session?.userId) {
-    return NextResponse.redirect(new URL("/organizations", req.nextUrl));
+    return NextResponse.redirect(new URL("/home/organizations", req.nextUrl));
   }
 }
 

@@ -1,4 +1,5 @@
-import AppSidebar from "@/components/AppSidebar";
+import { getUserDetails } from "@/actions/auth";
+import HomeSidebar from "@/components/HomeSidebar";
 import {
   Breadcrumb,
   BreadcrumbList,
@@ -13,10 +14,12 @@ import {
 } from "@/components/ui/sidebar";
 import { ReactNode } from "react";
 
-export default function LayourSideBase({ children }: { children: ReactNode }) {
+export default function HomeLayout({ children }: { children: ReactNode }) {
+  const userDataPromise = getUserDetails();
+
   return (
     <SidebarProvider>
-      <AppSidebar />
+      <HomeSidebar userDataPromise={userDataPromise} />
       <SidebarInset>
         <header className="flex h-14 shrink-0 items-center gap-2">
           <div className="flex flex-1 items-center gap-2 px-3">

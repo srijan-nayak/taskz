@@ -54,3 +54,8 @@ export type SessionPayload = JWTPayload & {
   userId: string;
   expiresAt: string;
 };
+
+export type UserDetails = {
+  id: string;
+  name: string;
+};

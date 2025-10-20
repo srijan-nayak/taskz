@@ -13,19 +13,26 @@ import {
 import { Archive, Building2 } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import LogoutButton from "./LogoutButton";
+import { UserDetails } from "@/lib/definitions/auth";
+import { Result } from "@/lib/definitions/generic";
 
-export default function AppSidebar() {
+export default function HomeSidebar({
+  userDataPromise,
+}: {
+  userDataPromise: Promise<Result<UserDetails, string>>;
+}) {
   const path = usePathname();
 
   const items = [
     {
       title: "Organizations",
-      url: "/organizations",
+      url: "/home/organizations",
       icon: Building2,
     },
     {
       title: "Invites",
-      url: "/invites",
+      url: "/home/invites",
       icon: Archive,
     },
   ];
@@ -50,7 +57,9 @@ export default function AppSidebar() {
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
-      <SidebarFooter></SidebarFooter>
+      <SidebarFooter>
+        <LogoutButton userDataPromise={userDataPromise} />
+      </SidebarFooter>
     </Sidebar>
   );
 }

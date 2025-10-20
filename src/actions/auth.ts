@@ -5,9 +5,11 @@ import {
   LoginFormState,
   SignupFormSchema,
   SignupFormState,
+  UserDetails,
 } from "@/lib/definitions/auth";
+import { Result } from "@/lib/definitions/generic";
 import prisma from "@/lib/prisma";
-import { createSession } from "@/lib/session";
+import { clearSession, createSession, verifySession } from "@/lib/session";
 import { hash, compare } from "bcrypt";
 import { redirect } from "next/navigation";
 import { z } from "zod";
@@ -66,7 +68,7 @@ export async function signup(
     };
   }
 
-  redirect("/organizations");
+  redirect("/home/organizations");
 }
 
 export async function login(
@@ -113,9 +115,34 @@ export async function login(
     };
   }
 
-  redirect("/organizations");
+  redirect("/home/organizations");
 }
 
-export async function getUserData() {
+export async function getUserDetails(): Promise<Result<UserDetails, string>> {
+  const session = await verifySession();
+  if (!session) {
+    redirect("/login");
+  }
 
+  try {
+    const { userId } = session;
+    const userData = await prisma.user.findUnique({
+      select: { id: true, name: true },
+      where: { id: userId },
+    });
+
+    if (!userData) {
+      return await logout();
+    }
+
+    return { ok: true, data: userData };
+  } catch (err) {
+    console.error("Failed to fetch user details", err);
+    return { ok: false, err: "Failed to fetch user details" };
+  }
+}
+
+export async function logout() {
+  await clearSession();
+  return redirect("/login");
 }
