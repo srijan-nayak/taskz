@@ -26,8 +26,10 @@ export type ProjectFormState = {
   id?: string;
 };
 
-export type ProjectsList = {
+export type ProjectDetails = {
   id: string;
   name: string;
   status: TaskStatus;
-}[];
+};
+
+export type ProjectsList = ProjectDetails[];

@@ -158,7 +158,7 @@ export async function getUserOrgDetails(
       },
     });
     if (!orgDetails) {
-      return { ok: false, err: "Failed to fetch organization details" };
+      redirect("/home/organizations");
     }
 
     return {
@@ -171,7 +171,7 @@ export async function getUserOrgDetails(
       },
     };
   } catch (err) {
-    console.error("Filed to fetch organization details", err);
-    return { ok: false, err: "Filed to fetch organization details" };
+    console.error("Failed to fetch organization details", err);
+    return { ok: false, err: "Failed to fetch organization details" };
   }
 }

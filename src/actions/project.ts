@@ -3,6 +3,7 @@
 import { isAdmin, isMember } from "@/lib/authorizatin";
 import { Result } from "@/lib/definitions/generic";
 import {
+  ProjectDetails,
   ProjectFormSchema,
   ProjectFormState,
   ProjectsList,
@@ -115,5 +116,43 @@ export async function createProject(
       name,
       id,
     };
+  }
+}
+
+export async function getProjectDetails(
+  orgId: string,
+  projectId: string
+): Promise<Result<ProjectDetails, string>> {
+  const session = await verifySession();
+  if (!session) {
+    redirect("/login");
+  }
+  const { userId } = session;
+
+  const isAuthorized = await isMember(userId, orgId);
+  if (!isAuthorized) {
+    redirect("/home/organizations");
+  }
+
+  try {
+    const data = await prisma.project.findUnique({
+      where: {
+        id: projectId,
+        organizationId: orgId,
+      },
+      select: {
+        id: true,
+        name: true,
+        status: true,
+      },
+    });
+    if (!data) {
+      redirect(`/organization/${orgId}/projects`);
+    }
+
+    return { ok: true, data };
+  } catch (err) {
+    console.error("Failed to fetch project details", err);
+    return { ok: false, err: "Failed to fetch project details" };
   }
 }
