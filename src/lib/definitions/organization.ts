@@ -6,7 +6,12 @@ export const OrganizationFormSchema = z.object({
     .string()
     .min(2, { message: "Name must be more than 2 characters" })
     .max(24, "Name cannot be more than 24 characters"),
-  id: z.string().optional(),
+  id: z
+    .string()
+    .regex(/^\S*$/, {
+      message: "ID must contain only non-whitespace characters",
+    })
+    .optional(),
 });
 
 export type OrganizationFormState = {
