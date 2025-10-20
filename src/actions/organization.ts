@@ -81,7 +81,7 @@ export async function createOrganization(
     revalidatePath("/home/organizations");
     return { success: true };
   } catch (err) {
-    console.log(err);
+    console.error("Failed to create organization!", err);
     return {
       message: "Failed to create organization! Try again later",
       success: false,
