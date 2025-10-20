@@ -3,6 +3,22 @@ import prisma from "@/lib/prisma";
 
 const ADMIN_ROLES: Role[] = [Role.ADMIN, Role.OWNER];
 
+export async function isMember(userId: string, organizationId: string) {
+  try {
+    const membership = await prisma.membership.findUnique({
+      where: {
+        userId_organizationId: {
+          userId,
+          organizationId,
+        },
+      },
+    });
+
+    return !!membership;
+  } catch {}
+  return false;
+}
+
 export async function isAdmin(userId: string, organizationId: string) {
   try {
     const membership = await prisma.membership.findUnique({
