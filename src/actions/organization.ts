@@ -26,6 +26,8 @@ export async function createOrganization(
     return redirect("/login");
   }
 
+  const { userId } = session;
+
   const validatedFields = OrganizationFormSchema.safeParse({
     name: data.get("name"),
     id: data.get("id"),
@@ -60,19 +62,17 @@ export async function createOrganization(
       }
     }
 
-    const organization = await prisma.organization.create({
+    await prisma.organization.create({
       data: {
         ...(id && { id }),
         name,
         createdById: session.userId,
-      },
-    });
-
-    await prisma.membership.create({
-      data: {
-        userId: session.userId,
-        organizationId: organization.id,
-        role: Role.OWNER,
+        members: {
+          create: {
+            userId,
+            role: Role.OWNER,
+          },
+        },
       },
     });
 
