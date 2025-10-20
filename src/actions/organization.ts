@@ -157,21 +157,21 @@ export async function getUserOrgDetails(
         },
       },
     });
-    if (!orgDetails) {
-      redirect("/home/organizations");
+    if (orgDetails) {
+      return {
+        ok: true,
+        data: {
+          orgId,
+          orgName: orgDetails.organization.name,
+          ownerName: orgDetails.organization.createdBy.name,
+          userRole: orgDetails.role,
+        },
+      };
     }
-
-    return {
-      ok: true,
-      data: {
-        orgId,
-        orgName: orgDetails.organization.name,
-        ownerName: orgDetails.organization.createdBy.name,
-        userRole: orgDetails.role,
-      },
-    };
   } catch (err) {
     console.error("Failed to fetch organization details", err);
     return { ok: false, err: "Failed to fetch organization details" };
   }
+
+  redirect("/home/organizations");
 }

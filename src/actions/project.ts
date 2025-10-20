@@ -146,13 +146,13 @@ export async function getProjectDetails(
         status: true,
       },
     });
-    if (!data) {
-      redirect(`/organization/${orgId}/projects`);
+    if (data) {
+      return { ok: true, data };
     }
-
-    return { ok: true, data };
   } catch (err) {
     console.error("Failed to fetch project details", err);
     return { ok: false, err: "Failed to fetch project details" };
   }
+
+  redirect(`/organization/${orgId}/projects`);
 }
