@@ -1,4 +1,3 @@
-import { getUserDetails } from "@/actions/auth";
 import OrgSidebar from "@/components/OrgSidebar";
 import {
   Breadcrumb,
@@ -19,11 +18,9 @@ export default function OrganizationsLayout({
 }: {
   children: ReactNode;
 }) {
-  const userDataPromise = getUserDetails();
-
   return (
     <SidebarProvider>
-      <OrgSidebar userDataPromise={userDataPromise} />
+      <OrgSidebar />
       <SidebarInset>
         <header className="flex h-14 shrink-0 items-center gap-2">
           <div className="flex flex-1 items-center gap-2 px-3">

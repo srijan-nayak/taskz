@@ -2,22 +2,17 @@
 
 import { logout } from "@/actions/auth";
 import { Button } from "@/components/ui/button";
-import { UserDetails } from "@/lib/definitions/auth";
-import { Result } from "@/lib/definitions/generic";
+import useUser from "@/hooks/useUserPromise";
 import { LogOut } from "lucide-react";
-import { use, useActionState } from "react";
+import { useActionState } from "react";
 
-export default function UserLogoutButton({
-  userDataPromise,
-}: {
-  userDataPromise: Promise<Result<UserDetails, string>>;
-}) {
-  const result = use(userDataPromise);
+export default function UserLogoutButton() {
+  const user = useUser();
   const [, action, pending] = useActionState(logout, null);
 
   return (
     <form className="flex justify-between items-center" action={action}>
-      {result.ok && result.data.name}
+      {user?.name}
       <Button
         variant="destructive"
         className="cursor-pointer"

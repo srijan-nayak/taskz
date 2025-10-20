@@ -14,14 +14,8 @@ import { User2 } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import UserLogoutButton from "./UserLogoutButton";
-import { UserDetails } from "@/lib/definitions/auth";
-import { Result } from "@/lib/definitions/generic";
 
-export default function OrgSidebar({
-  userDataPromise,
-}: {
-  userDataPromise: Promise<Result<UserDetails, string>>;
-}) {
+export default function OrgSidebar() {
   const path = usePathname();
 
   const items = [
@@ -56,7 +50,7 @@ export default function OrgSidebar({
         </SidebarGroup>
       </SidebarContent>
       <SidebarFooter>
-        <UserLogoutButton userDataPromise={userDataPromise} />
+        <UserLogoutButton />
       </SidebarFooter>
     </Sidebar>
   );
