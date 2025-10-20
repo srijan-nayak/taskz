@@ -26,17 +26,3 @@ export type OrgsList = {
   ownerName: string;
   role: Role;
 }[];
-
-export const InviteMemberFormSchema = z.object({
-  email: z.email({ message: "Email must be valid" }),
-  orgId: z.string(),
-});
-
-export type InviteMemberFormState = {
-  success: boolean;
-  errors?: {
-    email?: string[];
-  };
-  message?: string;
-  email?: string;
-};

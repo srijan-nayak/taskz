@@ -12,7 +12,7 @@ import {
 import { startTransition, useActionState, useEffect, useState } from "react";
 import InviteMemberForm from "@/components/InviteMemberForm";
 import { useParams } from "next/navigation";
-import { inviteMember } from "@/actions/organization";
+import { inviteMember } from "@/actions/invitations";
 
 export default function InviteMember() {
   const [open, setOpen] = useState(false);
