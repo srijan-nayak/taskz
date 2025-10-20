@@ -1,3 +1,5 @@
+"use client";
+
 import { Result } from "@/lib/definitions/generic";
 import { use } from "react";
 import {
@@ -18,6 +20,9 @@ import {
 } from "@/components/ui/table";
 import { MembersList } from "@/lib/definitions/membership";
 import RoleBadge from "./RoleBadge";
+import useOrganization from "@/hooks/useOrganization";
+import { Role } from "@/generated/prisma/enums";
+import MemberActions from "./MemberActions";
 
 export default function MembersTable({
   membersListPromise,
@@ -25,6 +30,7 @@ export default function MembersTable({
   membersListPromise: Promise<Result<MembersList, string>>;
 }) {
   const result = use(membersListPromise);
+  const org = useOrganization();
 
   return result.ok ? (
     result.data.length !== 0 ? (
@@ -33,6 +39,7 @@ export default function MembersTable({
           <TableRow>
             <TableHead>Member</TableHead>
             <TableHead>Role</TableHead>
+            {org?.userRole !== Role.MEMBER && <TableHead>Actions</TableHead>}
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -42,6 +49,11 @@ export default function MembersTable({
               <TableCell>
                 <RoleBadge role={data.role} />
               </TableCell>
+              {org?.userRole !== Role.MEMBER && (
+                <TableCell>
+                  <MemberActions memberId={data.id} memberRole={data.role} />
+                </TableCell>
+              )}
             </TableRow>
           ))}
         </TableBody>

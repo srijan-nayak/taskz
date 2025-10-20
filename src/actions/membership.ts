@@ -1,8 +1,12 @@
-import { isMember } from "@/lib/authorizatin";
+"use server";
+
+import { Role } from "@/generated/prisma/enums";
+import { isAdmin, isMember } from "@/lib/authorizatin";
 import { Result } from "@/lib/definitions/generic";
-import { MembersList } from "@/lib/definitions/membership";
+import { MemberActionSchema, MembersList } from "@/lib/definitions/membership";
 import prisma from "@/lib/prisma";
 import { verifySession } from "@/lib/session";
+import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
 export async function getMembers(
@@ -39,4 +43,117 @@ export async function getMembers(
     console.error("Failed to fetch members", err);
     return { ok: false, err: "Failed to fetch members" };
   }
+}
+
+export async function giveAdminStatus(_state: null, data: FormData) {
+  const session = await verifySession();
+  if (!session) {
+    redirect("/login");
+  }
+  const { userId } = session;
+
+  const validatedFields = MemberActionSchema.safeParse({
+    orgId: data.get("org-id"),
+    memberId: data.get("member-id"),
+  });
+  if (!validatedFields.success) {
+    return null;
+  }
+
+  const { memberId, orgId } = validatedFields.data;
+
+  const isAuthorized = await isAdmin(userId, orgId);
+  if (!isAuthorized) {
+    redirect("/home/organizations");
+  }
+
+  try {
+    await prisma.membership.update({
+      where: {
+        userId_organizationId: { userId: memberId, organizationId: orgId },
+        role: { not: Role.OWNER },
+      },
+      data: { role: Role.ADMIN },
+    });
+    revalidatePath(`/organizations/${orgId}/members`);
+  } catch (err) {
+    console.error("Failed to give admin status to member", err);
+  }
+
+  return null;
+}
+
+export async function revokeAdminStatus(_state: null, data: FormData) {
+  const session = await verifySession();
+  if (!session) {
+    redirect("/login");
+  }
+  const { userId } = session;
+
+  const validatedFields = MemberActionSchema.safeParse({
+    orgId: data.get("org-id"),
+    memberId: data.get("member-id"),
+  });
+  if (!validatedFields.success) {
+    return null;
+  }
+
+  const { memberId, orgId } = validatedFields.data;
+
+  const isAuthorized = await isAdmin(userId, orgId);
+  if (!isAuthorized) {
+    redirect("/home/organizations");
+  }
+
+  try {
+    await prisma.membership.update({
+      where: {
+        userId_organizationId: { userId: memberId, organizationId: orgId },
+        role: { not: Role.OWNER },
+      },
+      data: { role: Role.MEMBER },
+    });
+    revalidatePath(`/organizations/${orgId}/members`);
+  } catch (err) {
+    console.error("Failed to give admin status to member", err);
+  }
+
+  return null;
+}
+
+export async function removeMember(_state: null, data: FormData) {
+  const session = await verifySession();
+  if (!session) {
+    redirect("/login");
+  }
+  const { userId } = session;
+
+  const validatedFields = MemberActionSchema.safeParse({
+    orgId: data.get("org-id"),
+    memberId: data.get("member-id"),
+  });
+  if (!validatedFields.success) {
+    return null;
+  }
+
+  const { memberId, orgId } = validatedFields.data;
+
+  const isAuthorized = await isAdmin(userId, orgId);
+  if (!isAuthorized) {
+    redirect("/home/organizations");
+  }
+
+  try {
+    await prisma.membership.delete({
+      where: {
+        userId_organizationId: { userId: memberId, organizationId: orgId },
+        role: { not: Role.OWNER },
+      },
+    });
+    revalidatePath(`/organizations/${orgId}/members`);
+  } catch (err) {
+    console.error("Failed to give admin status to member", err);
+  }
+
+  return null;
 }

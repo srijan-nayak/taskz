@@ -1,3 +1,5 @@
+"use client"
+
 import { OrganizationPromiseContext } from "@/providers/OrganizationPromiseProvider";
 import { use, useContext } from "react";
 
