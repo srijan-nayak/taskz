@@ -1,14 +1,16 @@
 import InviteMember from "@/components/InviteMember";
+import MainHeader from "@/components/MainHeader";
+import PageTitle from "@/components/PageTitle";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Suspense } from "react";
 
 export default function MembersPage() {
   return (
     <>
-      <div className="flex items-center justify-between mb-4">
-        <h1 className="text-xl font-semibold">Organization Members</h1>
+      <MainHeader>
+        <PageTitle>Organization Members</PageTitle>
         <InviteMember />
-      </div>
+      </MainHeader>
       <Suspense fallback={<Skeleton className="h-96" />}>
         {/* <MembersTable membersListPromise={membersListPromise} /> */}
       </Suspense>

@@ -1,6 +1,8 @@
 import { getOrganizations } from "@/actions/organization";
 import CreateOrg from "@/components/CreateOrg";
+import MainHeader from "@/components/MainHeader";
 import OrgTable from "@/components/OrgTable";
+import PageTitle from "@/components/PageTitle";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Suspense } from "react";
 
@@ -9,10 +11,10 @@ export default function OrganizationsPage() {
 
   return (
     <>
-      <div className="flex items-center justify-between mb-4">
-        <h1 className="text-xl font-semibold">Your Organizations</h1>
+      <MainHeader>
+        <PageTitle>Your Organizations</PageTitle>
         <CreateOrg />
-      </div>
+      </MainHeader>
       <Suspense fallback={<Skeleton className="h-96" />}>
         <OrgTable orgsListPromise={orgsListPromise} />
       </Suspense>

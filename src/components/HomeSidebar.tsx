@@ -27,12 +27,12 @@ export default function HomeSidebar({
   const items = [
     {
       title: "Organizations",
-      url: "/home/organizations",
+      url: "./organizations",
       icon: Building2,
     },
     {
       title: "Invites",
-      url: "/home/invites",
+      url: "./invites",
       icon: Archive,
     },
   ];
@@ -45,7 +45,10 @@ export default function HomeSidebar({
             <SidebarMenu>
               {items.map((item) => (
                 <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild isActive={path.includes(item.url)}>
+                  <SidebarMenuButton
+                    asChild
+                    isActive={path.includes(item.url.slice(1))}
+                  >
                     <Link href={item.url}>
                       <item.icon />
                       <span>{item.title}</span>
