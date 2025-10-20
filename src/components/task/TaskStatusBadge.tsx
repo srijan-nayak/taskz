@@ -6,8 +6,8 @@ export default function TaskStatusBadge({ status }: { status: TaskStatus }) {
     case TaskStatus.TODO:
       return <Badge variant="destructive">Todo</Badge>;
     case TaskStatus.DONE:
-      return <Badge variant="default">Accepted</Badge>;
+      return <Badge variant="default">Done</Badge>;
     default:
-      return <Badge variant="secondary">Tentative</Badge>;
+      return <Badge variant="secondary">In-progress</Badge>;
   }
 }
