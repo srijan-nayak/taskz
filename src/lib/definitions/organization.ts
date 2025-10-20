@@ -26,3 +26,10 @@ export type OrgsList = {
   ownerName: string;
   role: Role;
 }[];
+
+export type UserOrgDetails = {
+  orgId: string;
+  orgName: string;
+  ownerName: string;
+  userRole: Role;
+};

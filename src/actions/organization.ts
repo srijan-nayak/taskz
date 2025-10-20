@@ -1,11 +1,13 @@
 "use server";
 
 import { Role } from "@/generated/prisma/enums";
+import { isMember } from "@/lib/authorizatin";
 import { Result } from "@/lib/definitions/generic";
 import {
   OrganizationFormSchema,
   OrganizationFormState,
   OrgsList,
+  UserOrgDetails,
 } from "@/lib/definitions/organization";
 import prisma from "@/lib/prisma";
 import { verifySession } from "@/lib/session";
@@ -119,5 +121,57 @@ export async function getOrganizations(): Promise<Result<OrgsList, string>> {
   } catch (err) {
     console.log("Failed to query organizations", err);
     return { ok: false, err: "Failed to query organizations" };
+  }
+}
+
+export async function getUserOrgDetails(
+  orgId: string
+): Promise<Result<UserOrgDetails, string>> {
+  const session = await verifySession();
+  if (!session) {
+    redirect("/login");
+  }
+
+  const { userId } = session;
+
+  const isAuthorized = await isMember(userId, orgId);
+  if (!isAuthorized) {
+    redirect("/home/organizations");
+  }
+
+  try {
+    const orgDetails = await prisma.membership.findUnique({
+      where: {
+        userId_organizationId: {
+          userId,
+          organizationId: orgId,
+        },
+      },
+      select: {
+        role: true,
+        organization: {
+          select: {
+            name: true,
+            createdBy: { select: { name: true } },
+          },
+        },
+      },
+    });
+    if (!orgDetails) {
+      return { ok: false, err: "Failed to fetch organization details" };
+    }
+
+    return {
+      ok: true,
+      data: {
+        orgId,
+        orgName: orgDetails.organization.name,
+        ownerName: orgDetails.organization.createdBy.name,
+        userRole: orgDetails.role,
+      },
+    };
+  } catch (err) {
+    console.error("Filed to fetch organization details", err);
+    return { ok: false, err: "Filed to fetch organization details" };
   }
 }

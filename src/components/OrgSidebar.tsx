@@ -6,6 +6,7 @@ import {
   SidebarFooter,
   SidebarGroup,
   SidebarGroupContent,
+  SidebarGroupLabel,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
@@ -14,9 +15,11 @@ import { User2 } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import UserLogoutButton from "./UserLogoutButton";
+import useOrganization from "@/hooks/useOrganization";
 
 export default function OrgSidebar() {
   const path = usePathname();
+  const org = useOrganization();
 
   const items = [
     {
@@ -30,6 +33,7 @@ export default function OrgSidebar() {
     <Sidebar variant="inset">
       <SidebarContent>
         <SidebarGroup>
+          {org && <SidebarGroupLabel>{org.orgName}</SidebarGroupLabel>}
           <SidebarGroupContent>
             <SidebarMenu>
               {items.map((item) => (

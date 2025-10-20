@@ -2,7 +2,7 @@
 
 import { logout } from "@/actions/auth";
 import { Button } from "@/components/ui/button";
-import useUser from "@/hooks/useUserPromise";
+import useUser from "@/hooks/useUser";
 import { LogOut } from "lucide-react";
 import { useActionState } from "react";
 
