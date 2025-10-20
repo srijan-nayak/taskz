@@ -25,9 +25,11 @@ model Organization {
   createdById String
   createdAt   DateTime @default(now())
 
-  createdBy User          @relation(fields: [createdById], references: [id])
-  members   Membership[]
-  invited   Invitations[]
+  createdBy  User          @relation(fields: [createdById], references: [id])
+  members    Membership[]
+  invited    Invitations[]
+  projects   Project[]
+  activities Activity[]
 }
 
 model Membership {
@@ -57,7 +59,7 @@ model Invitations {
 
   user         User         @relation(fields: [userId], references: [id], onDelete: Cascade)
   organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
-  
+
   @@unique([userId, organizationId])
 }
 
@@ -65,4 +67,41 @@ enum InviteStatus {
   ACCEPTED
   REJECTED
   TENTATIVE
+}
+
+model Project {
+  id             String     @id @default(cuid())
+  name           String
+  status         TaskStatus @default(TODO)
+  organizationId String
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  tasks        Task[]
+  activities   Activity[]
+}
+
+model Task {
+  id          Int        @id @default(autoincrement())
+  title       String
+  description String     @db.Text
+  status      TaskStatus @default(TODO)
+  projectId   String
+
+  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+}
+
+enum TaskStatus {
+  TODO
+  IN_PROGRESS
+  DONE
+}
+
+model Activity {
+  id             Int     @id @default(autoincrement())
+  description    String  @db.Text
+  organizationId String
+  projectId      String?
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  project      Project?     @relation(fields: [projectId], references: [id], onDelete: Cascade)
 }
