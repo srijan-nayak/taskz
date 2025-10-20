@@ -14,7 +14,7 @@ import {
 import { FolderCode, Mail, User2 } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import UserLogoutButton from "./UserLogoutButton";
+import UserLogoutButton from "../auth/UserLogoutButton";
 import useOrganization from "@/hooks/useOrganization";
 import { Role } from "@/generated/prisma/enums";
 

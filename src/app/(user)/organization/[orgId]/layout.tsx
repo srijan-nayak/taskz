@@ -1,5 +1,5 @@
 import { getUserOrgDetails } from "@/actions/organization";
-import OrgSidebar from "@/components/OrgSidebar";
+import OrgSidebar from "@/components/organization/OrgSidebar";
 import {
   Breadcrumb,
   BreadcrumbList,

@@ -9,13 +9,13 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import OrganizationForm from "@/components/OrganizationForm";
 import { startTransition, useActionState, useEffect, useState } from "react";
-import { createOrganization } from "@/actions/organization";
+import TaskForm from "@/components/task/TaskForm";
+import { createTask } from "@/actions/task";
 
-export default function CreateOrg() {
+export default function CreateTask() {
   const [open, setOpen] = useState(false);
-  const [state, action, pending] = useActionState(createOrganization, {
+  const [state, action, pending] = useActionState(createTask, {
     success: false,
   });
 
@@ -35,14 +35,14 @@ export default function CreateOrg() {
     <Dialog onOpenChange={setOpen} open={open}>
       <DialogTrigger asChild>
         <Button className="cursor-pointer">
-          <CirclePlus /> <span>Create Organization</span>
+          <CirclePlus /> <span>Create Task</span>
         </Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Create a new organization</DialogTitle>
+          <DialogTitle>Create a new task</DialogTitle>
         </DialogHeader>
-        <OrganizationForm {...{ state, action, pending }} />
+        <TaskForm {...{ state, action, pending }} />
       </DialogContent>
     </Dialog>
   );

@@ -10,7 +10,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { startTransition, useActionState, useEffect, useState } from "react";
-import InviteMemberForm from "@/components/InviteMemberForm";
+import InviteMemberForm from "@/components/membership/InviteMemberForm";
 import { useParams } from "next/navigation";
 import { inviteMember } from "@/actions/invitations";
 

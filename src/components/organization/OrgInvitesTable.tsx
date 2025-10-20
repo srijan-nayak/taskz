@@ -17,7 +17,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { OrgInvitesList } from "@/lib/definitions/invitations";
-import InviteStatusBadge from "./InviteStatusBadge";
+import InviteStatusBadge from "@/components/membership/InviteStatusBadge";
 
 export default function OrgInvitesTable({
   orgInvitesListPromise,

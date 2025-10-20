@@ -1,6 +1,6 @@
 import { getUserOrgDetails } from "@/actions/organization";
 import { getProjectDetails } from "@/actions/project";
-import ProjectSidebar from "@/components/ProjectSidebar";
+import ProjectSidebar from "@/components/project/ProjectSidebar";
 import {
   Breadcrumb,
   BreadcrumbList,

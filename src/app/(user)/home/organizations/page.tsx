@@ -1,8 +1,8 @@
 import { getOrganizations } from "@/actions/organization";
-import CreateOrg from "@/components/CreateOrg";
-import MainHeader from "@/components/MainHeader";
-import OrgTable from "@/components/OrgTable";
-import PageTitle from "@/components/PageTitle";
+import CreateOrg from "@/components/organization/CreateOrg";
+import MainHeader from "@/components/common/MainHeader";
+import OrgTable from "@/components/organization/OrgTable";
+import PageTitle from "@/components/common/PageTitle";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Suspense } from "react";
 

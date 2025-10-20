@@ -1,10 +1,10 @@
 "use client";
 
 import useOrganization from "@/hooks/useOrganization";
-import MainHeader from "./MainHeader";
-import PageTitle from "./PageTitle";
+import MainHeader from "@/components/common/MainHeader";
+import PageTitle from "@/components/common/PageTitle";
 import { Role } from "@/generated/prisma/enums";
-import CreateProject from "./CreateProject";
+import CreateProject from "@/components/project/CreateProject";
 
 export default function OrgProjectsHeader() {
   const org = useOrganization();

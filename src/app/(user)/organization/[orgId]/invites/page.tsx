@@ -1,7 +1,7 @@
 import { getOrganizationInvitations } from "@/actions/invitations";
-import MainHeader from "@/components/MainHeader";
-import OrgInvitesTable from "@/components/OrgInvitesTable";
-import PageTitle from "@/components/PageTitle";
+import MainHeader from "@/components/common/MainHeader";
+import OrgInvitesTable from "@/components/organization/OrgInvitesTable";
+import PageTitle from "@/components/common/PageTitle";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Suspense } from "react";
 

@@ -19,9 +19,9 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import TaskStatusBadge from "@/components/TaskStatusBadge";
+import TaskStatusBadge from "@/components/task/TaskStatusBadge";
 import { TasksList } from "@/lib/definitions/task";
-import CreateTask from "./CreateTask";
+import CreateTask from "@/components/task/CreateTask";
 
 export default function TasksTable({
   tasksListPromise,

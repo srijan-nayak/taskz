@@ -4,7 +4,7 @@ import { Check, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useActionState } from "react";
 import { acceptInvite, rejectInvite } from "@/actions/invitations";
-import { Input } from "./ui/input";
+import { Input } from "@/components/ui/input";
 
 export default function InviteActions({ orgId }: { orgId: string }) {
   const [, acceptAction, acceptPending] = useActionState(acceptInvite, null);

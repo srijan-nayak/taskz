@@ -1,6 +1,6 @@
 import { getMembers } from "@/actions/membership";
-import MembersTable from "@/components/MembersTable";
-import OrgMembersHeader from "@/components/OrgMembersHeader";
+import MembersTable from "@/components/membership/MembersTable";
+import OrgMembersHeader from "@/components/organization/OrgMembersHeader";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Suspense } from "react";
 

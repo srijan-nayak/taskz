@@ -22,7 +22,7 @@ import { MembersList } from "@/lib/definitions/membership";
 import RoleBadge from "./RoleBadge";
 import useOrganization from "@/hooks/useOrganization";
 import { Role } from "@/generated/prisma/enums";
-import MemberActions from "./MemberActions";
+import MemberActions from "@/components/membership/MemberActions";
 
 export default function MembersTable({
   membersListPromise,

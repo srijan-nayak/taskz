@@ -1,6 +1,6 @@
 import { getProjects } from "@/actions/project";
-import OrgProjectsHeader from "@/components/OrgProjectsHeader";
-import ProjectsTable from "@/components/ProjectsTable";
+import OrgProjectsHeader from "@/components/organization/OrgProjectsHeader";
+import ProjectsTable from "@/components/project/ProjectsTable";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Suspense } from "react";
 

@@ -1,8 +1,8 @@
 import { getTasks } from "@/actions/task";
-import CreateTask from "@/components/CreateTask";
-import MainHeader from "@/components/MainHeader";
-import PageTitle from "@/components/PageTitle";
-import TasksTable from "@/components/TasksTable";
+import CreateTask from "@/components/task/CreateTask";
+import MainHeader from "@/components/common/MainHeader";
+import PageTitle from "@/components/common/PageTitle";
+import TasksTable from "@/components/task/TasksTable";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Suspense } from "react";
 

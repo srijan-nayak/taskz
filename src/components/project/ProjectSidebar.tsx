@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/sidebar";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import UserLogoutButton from "./UserLogoutButton";
+import UserLogoutButton from "@/components/auth/UserLogoutButton";
 import useProject from "@/hooks/useProject";
 import { ListTodo } from "lucide-react";
 

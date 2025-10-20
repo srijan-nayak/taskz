@@ -1,4 +1,4 @@
-import HomeSidebar from "@/components/HomeSidebar";
+import HomeSidebar from "@/components/home/HomeSidebar";
 import {
   Breadcrumb,
   BreadcrumbList,

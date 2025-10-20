@@ -3,7 +3,7 @@
 import { X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useActionState } from "react";
-import { Input } from "./ui/input";
+import { Input } from "@/components/ui/input";
 import { Role } from "@/generated/prisma/enums";
 import useOrganization from "@/hooks/useOrganization";
 import {

@@ -22,10 +22,10 @@ import {
 import useOrganization from "@/hooks/useOrganization";
 import { Role } from "@/generated/prisma/enums";
 import { ProjectsList } from "@/lib/definitions/project";
-import CreateProject from "@/components/CreateProject";
+import CreateProject from "@/components/project/CreateProject";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import TaskStatusBadge from "@/components/TaskStatusBadge";
+import TaskStatusBadge from "@/components/task/TaskStatusBadge";
 
 export default function ProjectsTable({
   projectsListPromise,

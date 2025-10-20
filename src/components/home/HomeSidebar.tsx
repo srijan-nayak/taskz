@@ -6,6 +6,7 @@ import {
   SidebarFooter,
   SidebarGroup,
   SidebarGroupContent,
+  SidebarGroupLabel,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
@@ -13,7 +14,7 @@ import {
 import { Archive, Building2 } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import UserLogoutButton from "./UserLogoutButton";
+import UserLogoutButton from "@/components/auth/UserLogoutButton";
 
 export default function HomeSidebar() {
   const path = usePathname();
@@ -35,6 +36,7 @@ export default function HomeSidebar() {
     <Sidebar variant="inset">
       <SidebarContent>
         <SidebarGroup>
+          <SidebarGroupLabel>Home</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               {items.map((item) => (

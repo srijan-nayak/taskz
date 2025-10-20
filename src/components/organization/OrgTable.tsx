@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/empty";
 import { Button } from "@/components/ui/button";
 import { Building, Mail } from "lucide-react";
-import CreateOrg from "@/components/CreateOrg";
+import CreateOrg from "@/components/organization/CreateOrg";
 import Link from "next/link";
 import {
   Table,
@@ -21,7 +21,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import RoleBadge from "@/components/RoleBadge";
+import RoleBadge from "@/components/membership/RoleBadge";
 
 export default function OrgTable({
   orgsListPromise,
