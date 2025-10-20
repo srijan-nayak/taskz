@@ -1,8 +1,6 @@
 import { getMembers } from "@/actions/membership";
-import InviteMember from "@/components/InviteMember";
-import MainHeader from "@/components/MainHeader";
 import MembersTable from "@/components/MembersTable";
-import PageTitle from "@/components/PageTitle";
+import OrgMembersHeader from "@/components/OrgMembersHeader";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Suspense } from "react";
 
@@ -16,10 +14,7 @@ export default async function MembersPage({
 
   return (
     <>
-      <MainHeader>
-        <PageTitle>Organization Members</PageTitle>
-        <InviteMember />
-      </MainHeader>
+      <OrgMembersHeader />
       <Suspense fallback={<Skeleton className="h-96" />}>
         <MembersTable membersListPromise={membersListPromise} />
       </Suspense>

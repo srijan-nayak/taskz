@@ -8,6 +8,7 @@ import {
   InviteMemberFormSchema,
   InvitesList,
   InviteActionSchema,
+  OrgInvitesList,
 } from "@/lib/definitions/invitations";
 import prisma from "@/lib/prisma";
 import { verifySession, clearSession } from "@/lib/session";
@@ -101,7 +102,7 @@ export async function getUserInvitations(): Promise<
         },
         status: true,
       },
-      orderBy: { createdAt: "asc" },
+      orderBy: { createdAt: "desc" },
     });
 
     const data: InvitesList = invites.map((r) => ({
@@ -200,4 +201,41 @@ export async function rejectInvite(
   }
 
   return null;
+}
+
+export async function getOrganizationInvitations(
+  orgId: string
+): Promise<Result<OrgInvitesList, string>> {
+  const session = await verifySession();
+  if (!session) {
+    redirect("/login");
+  }
+  const { userId } = session;
+
+  const isAuthorized = await isAdmin(userId, orgId);
+  if (!isAuthorized) {
+    redirect("/home/organizations");
+  }
+
+  try {
+    const invites = await prisma.invitations.findMany({
+      where: { organizationId: orgId },
+      orderBy: { createdAt: "desc" },
+      select: {
+        userId: true,
+        user: { select: { name: true } },
+        status: true,
+      },
+    });
+    const data: OrgInvitesList = invites.map((r) => ({
+      memberId: r.userId,
+      memberName: r.user.name,
+      status: r.status,
+    }));
+
+    return { ok: true, data };
+  } catch (err) {
+    console.error("Failed to fetch organization invites", err);
+    return { ok: false, err: "Failed to fetch organization invites" };
+  }
 }

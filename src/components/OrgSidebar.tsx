@@ -11,11 +11,12 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
-import { User2 } from "lucide-react";
+import { Mail, User2 } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import UserLogoutButton from "./UserLogoutButton";
 import useOrganization from "@/hooks/useOrganization";
+import { Role } from "@/generated/prisma/enums";
 
 export default function OrgSidebar() {
   const path = usePathname();
@@ -27,6 +28,12 @@ export default function OrgSidebar() {
       url: "./members",
       icon: User2,
     },
+    {
+      title: "Invites",
+      url: "./invites",
+      icon: Mail,
+      hide: org?.userRole === Role.MEMBER,
+    },
   ];
 
   return (
@@ -36,19 +43,21 @@ export default function OrgSidebar() {
           {org && <SidebarGroupLabel>{org.orgName}</SidebarGroupLabel>}
           <SidebarGroupContent>
             <SidebarMenu>
-              {items.map((item) => (
-                <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton
-                    asChild
-                    isActive={path.includes(item.url.slice(1))}
-                  >
-                    <Link href={item.url}>
-                      <item.icon />
-                      <span>{item.title}</span>
-                    </Link>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
+              {items
+                .filter((i) => !i.hide)
+                .map((item) => (
+                  <SidebarMenuItem key={item.title}>
+                    <SidebarMenuButton
+                      asChild
+                      isActive={path.includes(item.url.slice(1))}
+                    >
+                      <Link href={item.url}>
+                        <item.icon />
+                        <span>{item.title}</span>
+                      </Link>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                ))}
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
