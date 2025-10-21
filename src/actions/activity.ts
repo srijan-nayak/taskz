@@ -6,7 +6,8 @@ import { verifySession } from "@/lib/session";
 import { redirect } from "next/navigation";
 
 export async function getOrgActivity(
-  organizationId: string
+  organizationId: string,
+  projectId?: string
 ): Promise<Result<ActivityList, string>> {
   const session = await verifySession();
   if (!session) {
@@ -22,7 +23,7 @@ export async function getOrgActivity(
 
   try {
     const data = await prisma.activity.findMany({
-      where: { organizationId },
+      where: { organizationId, ...(projectId && { projectId }) },
       select: {
         id: true,
         description: true,

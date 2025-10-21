@@ -15,7 +15,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import UserLogoutButton from "@/components/auth/UserLogoutButton";
 import useProject from "@/hooks/useProject";
-import { Kanban, ListTodo } from "lucide-react";
+import { Activity, Kanban, ListTodo } from "lucide-react";
 
 export default function OrgSidebar() {
   const path = usePathname();
@@ -31,6 +31,11 @@ export default function OrgSidebar() {
       title: "Tasks",
       url: "./tasks",
       icon: ListTodo,
+    },
+    {
+      title: "Activity",
+      url: "./activity",
+      icon: Activity,
     },
   ];
 
