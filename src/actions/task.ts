@@ -16,7 +16,8 @@ import z from "zod";
 
 export async function getTasks(
   organizationId: string,
-  projectId: string
+  projectId: string,
+  detailed?: boolean
 ): Promise<Result<TasksList, string>> {
   const session = await verifySession();
   if (!session) {
@@ -32,7 +33,7 @@ export async function getTasks(
   try {
     const data = await prisma.task.findMany({
       where: { projectId, project: { organizationId } },
-      select: { id: true, title: true, status: true },
+      select: { id: true, title: true, status: true, description: detailed },
       orderBy: { createAt: "desc" },
     });
 

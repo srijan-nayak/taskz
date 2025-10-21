@@ -82,7 +82,7 @@ export default function TaskForm({
               className="w-full cursor-pointer"
               disabled={pending}
             >
-              Create Project
+              Create Task
             </Button>
             {state?.message && <FieldError>{state.message}</FieldError>}
           </Field>

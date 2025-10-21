@@ -13,9 +13,10 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from "@/components/ui/sidebar";
+import { Skeleton } from "@/components/ui/skeleton";
 import OrganizationPromiseProvider from "@/providers/OrganizationPromiseProvider";
 import ProjectPromiseProvider from "@/providers/ProjectPromiseProvider";
-import { ReactNode } from "react";
+import { ReactNode, Suspense } from "react";
 
 export default async function ProjectLayout({
   children,
@@ -49,7 +50,11 @@ export default async function ProjectLayout({
                 </Breadcrumb>
               </div>
             </header>
-            <main className="px-3">{children}</main>
+            <main className="px-3">
+              <Suspense fallback={<Skeleton className="h-96" />}>
+                {children}
+              </Suspense>
+            </main>
           </SidebarInset>
         </SidebarProvider>
       </ProjectPromiseProvider>
