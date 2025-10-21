@@ -7,6 +7,7 @@ import {
   ProjectFormSchema,
   ProjectFormState,
   ProjectsList,
+  ProjectStatusFormSchema,
 } from "@/lib/definitions/project";
 import prisma from "@/lib/prisma";
 import { verifySession } from "@/lib/session";
@@ -155,4 +156,44 @@ export async function getProjectDetails(
   }
 
   redirect(`/organization/${orgId}/projects`);
+}
+
+export async function updateProjectStatus(_state: null, data: FormData) {
+  const session = await verifySession();
+  if (!session) {
+    redirect("/login");
+  }
+  const { userId } = session;
+
+  const validatedFields = ProjectStatusFormSchema.safeParse({
+    orgId: data.get("org-id"),
+    projectId: data.get("project-id"),
+    status: data.get("status"),
+  });
+  if (!validatedFields.success) {
+    return null;
+  }
+  console.log("fields", validatedFields.data);
+
+  const { orgId, projectId, status } = validatedFields.data;
+
+  const isAuthorized = await isAdmin(userId, orgId);
+  if (!isAuthorized) {
+    redirect("/home/organizations");
+  }
+
+  try {
+    await prisma.project.update({
+      where: {
+        id: projectId,
+        organizationId: orgId,
+      },
+      data: { status },
+    });
+    revalidatePath(`/organization/${orgId}/projects`);
+  } catch (err) {
+    console.error("Failed to update task status", err);
+  }
+
+  return null;
 }

@@ -116,10 +116,6 @@ export async function updateTaskStatus(_state: null, data: FormData) {
   }
   const { userId } = session;
 
-  console.log(data.get("org-id")?.toString());
-  console.log(data.get("project-id")?.toString());
-  console.log(data.get("task-id")?.toString());
-  console.log(data.get("status")?.toString());
   const validatedFields = TaskStatusFormSchema.safeParse({
     orgId: data.get("org-id"),
     projectId: data.get("project-id"),

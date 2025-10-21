@@ -5,36 +5,28 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useParams } from "next/navigation";
 import { useActionState } from "react";
-import { updateTaskStatus } from "@/actions/task";
+import { updateProjectStatus } from "@/actions/project";
 
-export default function UpdateTaskStatus({
+export default function UpdateProjectStatus({
   status,
-  taskId,
+  projectId,
 }: {
   status: TaskStatus;
-  taskId: number;
+  projectId: string;
 }) {
-  const { orgId, projectId } = useParams<{
+  const { orgId } = useParams<{
     orgId: string;
-    projectId: string;
   }>();
 
-  const [, action, pending] = useActionState(updateTaskStatus, null);
+  const [, action, pending] = useActionState(updateProjectStatus, null);
 
   return (
     <form action={action}>
       <Input hidden name="org-id" type="text" defaultValue={orgId} readOnly />
       <Input
         hidden
-        name="task-id"
-        type="number"
-        defaultValue={taskId}
-        readOnly
-      />
-      <Input
-        hidden
         name="project-id"
-        type="text"
+        type="string"
         defaultValue={projectId}
         readOnly
       />

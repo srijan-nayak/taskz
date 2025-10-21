@@ -33,3 +33,9 @@ export type ProjectDetails = {
 };
 
 export type ProjectsList = ProjectDetails[];
+
+export const ProjectStatusFormSchema = z.object({
+  orgId: z.string(),
+  projectId: z.string(),
+  status: z.enum(TaskStatus),
+});

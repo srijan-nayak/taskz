@@ -26,6 +26,7 @@ import CreateProject from "@/components/project/CreateProject";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import TaskStatusBadge from "@/components/task/TaskStatusBadge";
+import UpdateProjectStatus from "./UpdateProjectStatus";
 
 export default function ProjectsTable({
   projectsListPromise,
@@ -42,6 +43,9 @@ export default function ProjectsTable({
           <TableRow>
             <TableHead>Project</TableHead>
             <TableHead>Status</TableHead>
+            {org?.userRole !== Role.MEMBER && (
+              <TableHead>Update Status</TableHead>
+            )}
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -57,6 +61,14 @@ export default function ProjectsTable({
               <TableCell>
                 <TaskStatusBadge status={data.status} />
               </TableCell>
+              {org?.userRole !== Role.MEMBER && (
+                <TableCell>
+                  <UpdateProjectStatus
+                    projectId={data.id}
+                    status={data.status}
+                  />
+                </TableCell>
+              )}
             </TableRow>
           ))}
         </TableBody>
