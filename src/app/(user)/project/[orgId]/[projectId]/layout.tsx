@@ -31,7 +31,7 @@ export default async function ProjectLayout({
           <SidebarInset>
             <header className="flex h-14 shrink-0 items-center gap-2">
               <div className="flex flex-1 items-center gap-2 px-3">
-                <SidebarTrigger />
+                <SidebarTrigger className="cursor-pointer" />
                 <Suspense fallback={<Skeleton className="w-56 h-4" />}>
                   <ProjectBreadcrumb />
                 </Suspense>
