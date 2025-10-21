@@ -81,22 +81,34 @@ export async function createTask(
   }
 
   try {
-    const project = await prisma.project.findUnique({
-      where: { id: projectId, organizationId: orgId },
-    });
+    await prisma.$transaction(async () => {
+      const user = await prisma.user.findUniqueOrThrow({
+        where: { id: userId },
+        select: { name: true },
+      });
+      const project = await prisma.project.findUniqueOrThrow({
+        where: { id: projectId, organizationId: orgId },
+        select: { id: true, name: true },
+      });
 
-    if (project) {
       await prisma.task.create({
         data: {
           title,
           description,
-          projectId,
+          projectId: project.id,
         },
       });
+      await prisma.activity.create({
+        data: {
+          projectId: project.id,
+          organizationId: orgId,
+          description: `${user.name} created task "${title}" in ${project.name}`,
+        },
+      });
+    });
 
-      revalidatePath(`/project/${orgId}/${projectId}/tasks`);
-      return { success: true };
-    }
+    revalidatePath(`/project/${orgId}/${projectId}/tasks`);
+    return { success: true };
   } catch (err) {
     console.error("Failed to create task", err);
     return {
@@ -106,7 +118,6 @@ export async function createTask(
       description,
     };
   }
-  redirect(`/organization/${orgId}/projects`);
 }
 
 export async function updateTaskStatus(_state: null, data: FormData) {
@@ -134,13 +145,32 @@ export async function updateTaskStatus(_state: null, data: FormData) {
   }
 
   try {
-    await prisma.task.update({
-      where: {
-        id: taskId,
-        projectId,
-        project: { organizationId: orgId },
-      },
-      data: { status },
+    await prisma.$transaction(async () => {
+      const user = await prisma.user.findUniqueOrThrow({
+        where: { id: userId },
+        select: { name: true },
+      });
+      const project = await prisma.project.findUniqueOrThrow({
+        where: { id: projectId, organizationId: orgId },
+        select: { id: true, name: true },
+      });
+
+      const task = await prisma.task.update({
+        where: {
+          id: taskId,
+          projectId,
+          project: { organizationId: orgId },
+        },
+        data: { status },
+        select: { title: true },
+      });
+      await prisma.activity.create({
+        data: {
+          projectId: project.id,
+          organizationId: orgId,
+          description: `${user.name} marked "${task.title}" as ${status} in ${project.name}`,
+        },
+      });
     });
 
     revalidatePath(`/project/${orgId}/${projectId}/tasks`);

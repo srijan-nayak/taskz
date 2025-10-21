@@ -28,6 +28,7 @@ export async function inviteMember(
   if (!session) {
     redirect("/login");
   }
+  const { userId } = session;
 
   const validatedFields = InviteMemberFormSchema.safeParse({
     email: data.get("email"),
@@ -49,24 +50,39 @@ export async function inviteMember(
   }
 
   try {
-    const user = await prisma.user.findUnique({
-      where: { email },
-      select: { id: true },
-    });
-    if (!user) {
-      return {
-        success: false,
-        email,
-        message: "No user exists for the given mail",
-      };
-    }
+    const response = await prisma.$transaction(async () => {
+      const user = await prisma.user.findUniqueOrThrow({
+        where: { id: userId },
+        select: { name: true },
+      });
+      const member = await prisma.user.findUnique({
+        where: { email },
+        select: { id: true, name: true },
+      });
+      if (!member) {
+        return {
+          success: false,
+          email,
+          message: "No user exists for the given mail",
+        };
+      }
 
-    await prisma.invitations.create({
-      data: {
-        userId: user.id,
-        organizationId: orgId,
-      },
+      await prisma.invitations.create({
+        data: {
+          userId: member.id,
+          organizationId: orgId,
+        },
+      });
+      await prisma.activity.create({
+        data: {
+          organizationId: orgId,
+          description: `${user.name} has invited ${member.name} to join the organization`,
+        },
+      });
     });
+    if (response) {
+      return response;
+    }
   } catch (err) {
     console.log("Failed to create invitation", err);
     return {
@@ -140,6 +156,10 @@ export async function acceptInvite(
 
   try {
     await prisma.$transaction(async () => {
+      const user = await prisma.user.findUniqueOrThrow({
+        where: { id: userId },
+        select: { name: true },
+      });
       await prisma.invitations.update({
         where: {
           userId_organizationId: {
@@ -154,6 +174,13 @@ export async function acceptInvite(
         data: {
           userId,
           organizationId: orgId,
+        },
+      });
+
+      await prisma.activity.create({
+        data: {
+          organizationId: orgId,
+          description: `${user.name} has joined the organization`,
         },
       });
     });

@@ -82,30 +82,48 @@ export async function createProject(
   }
 
   try {
-    if (id) {
-      const project = await prisma.project.findUnique({
-        where: { id },
+    const response = await prisma.$transaction(async () => {
+      const user = await prisma.user.findUniqueOrThrow({
+        where: { id: userId },
+        select: { name: true },
       });
 
-      if (project) {
-        return {
-          errors: {
-            id: ["ID already allocted for another project"],
-          },
-          success: false,
-          name,
-          id,
-        };
-      }
-    }
+      if (id) {
+        const project = await prisma.project.findUnique({
+          where: { id },
+        });
 
-    await prisma.project.create({
-      data: {
-        ...(id && { id }),
-        name,
-        organizationId: orgId,
-      },
+        if (project) {
+          return {
+            errors: {
+              id: ["ID already allocted for another project"],
+            },
+            success: false,
+            name,
+            id,
+          };
+        }
+      }
+
+      const project = await prisma.project.create({
+        data: {
+          ...(id && { id }),
+          name,
+          organizationId: orgId,
+        },
+        select: { id: true },
+      });
+      await prisma.activity.create({
+        data: {
+          organizationId: orgId,
+          projectId: project.id,
+          description: `${user.name} created project ${name}`,
+        },
+      });
     });
+    if (response) {
+      return response;
+    }
 
     revalidatePath(`/organization/${orgId}/projects`);
     return { success: true };
@@ -183,12 +201,30 @@ export async function updateProjectStatus(_state: null, data: FormData) {
   }
 
   try {
-    await prisma.project.update({
-      where: {
-        id: projectId,
-        organizationId: orgId,
-      },
-      data: { status },
+    await prisma.$transaction(async () => {
+      const user = await prisma.user.findUniqueOrThrow({
+        where: { id: userId },
+        select: { name: true },
+      });
+      const project = await prisma.project.findUniqueOrThrow({
+        where: { id: projectId },
+        select: { name: true },
+      });
+
+      await prisma.project.update({
+        where: {
+          id: projectId,
+          organizationId: orgId,
+        },
+        data: { status },
+      });
+      await prisma.activity.create({
+        data: {
+          projectId,
+          organizationId: orgId,
+          description: `${user.name} marked ${project.name} as ${status}`,
+        },
+      });
     });
     revalidatePath(`/organization/${orgId}/projects`);
   } catch (err) {

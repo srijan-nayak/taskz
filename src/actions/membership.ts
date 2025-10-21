@@ -68,12 +68,29 @@ export async function giveAdminStatus(_state: null, data: FormData) {
   }
 
   try {
-    await prisma.membership.update({
-      where: {
-        userId_organizationId: { userId: memberId, organizationId: orgId },
-        role: { not: Role.OWNER },
-      },
-      data: { role: Role.ADMIN },
+    await prisma.$transaction(async () => {
+      const user = await prisma.user.findUniqueOrThrow({
+        where: { id: userId },
+        select: { name: true },
+      });
+      const member = await prisma.user.findUniqueOrThrow({
+        where: { id: memberId },
+        select: { name: true },
+      });
+
+      await prisma.membership.update({
+        where: {
+          userId_organizationId: { userId: memberId, organizationId: orgId },
+          role: { not: Role.OWNER },
+        },
+        data: { role: Role.ADMIN },
+      });
+      await prisma.activity.create({
+        data: {
+          organizationId: orgId,
+          description: `${user.name} made ${member.name} an admin`,
+        },
+      });
     });
     revalidatePath(`/organizations/${orgId}/members`);
   } catch (err) {
@@ -106,12 +123,29 @@ export async function revokeAdminStatus(_state: null, data: FormData) {
   }
 
   try {
-    await prisma.membership.update({
-      where: {
-        userId_organizationId: { userId: memberId, organizationId: orgId },
-        role: { not: Role.OWNER },
-      },
-      data: { role: Role.MEMBER },
+    await prisma.$transaction(async () => {
+      const user = await prisma.user.findUniqueOrThrow({
+        where: { id: userId },
+        select: { name: true },
+      });
+      const member = await prisma.user.findUniqueOrThrow({
+        where: { id: memberId },
+        select: { name: true },
+      });
+
+      await prisma.membership.update({
+        where: {
+          userId_organizationId: { userId: memberId, organizationId: orgId },
+          role: { not: Role.OWNER },
+        },
+        data: { role: Role.MEMBER },
+      });
+      await prisma.activity.create({
+        data: {
+          organizationId: orgId,
+          description: `${user.name} made ${member.name} a member`,
+        },
+      });
     });
     revalidatePath(`/organizations/${orgId}/members`);
   } catch (err) {
@@ -144,11 +178,28 @@ export async function removeMember(_state: null, data: FormData) {
   }
 
   try {
-    await prisma.membership.delete({
-      where: {
-        userId_organizationId: { userId: memberId, organizationId: orgId },
-        role: { not: Role.OWNER },
-      },
+    await prisma.$transaction(async () => {
+      const user = await prisma.user.findUniqueOrThrow({
+        where: { id: userId },
+        select: { name: true },
+      });
+      const member = await prisma.user.findUniqueOrThrow({
+        where: { id: memberId },
+        select: { name: true },
+      });
+
+      await prisma.membership.delete({
+        where: {
+          userId_organizationId: { userId: memberId, organizationId: orgId },
+          role: { not: Role.OWNER },
+        },
+      });
+      await prisma.activity.create({
+        data: {
+          organizationId: orgId,
+          description: `${user.name} removed ${member.name} from the organization`,
+        },
+      });
     });
     revalidatePath(`/organizations/${orgId}/members`);
   } catch (err) {

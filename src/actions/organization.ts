@@ -47,36 +47,51 @@ export async function createOrganization(
   const { id, name } = validatedFields.data;
 
   try {
-    if (id) {
-      const organization = await prisma.organization.findUnique({
-        where: { id },
+    const response = await prisma.$transaction(async () => {
+      const user = await prisma.user.findUniqueOrThrow({
+        where: { id: userId },
+        select: { name: true },
       });
 
-      if (organization) {
-        return {
-          errors: {
-            id: ["ID already allocaetd for another org"],
-          },
-          success: false,
-          name,
-          id,
-        };
+      if (id) {
+        const organization = await prisma.organization.findUnique({
+          where: { id },
+        });
+        if (organization) {
+          return {
+            errors: { id: ["ID already allocaetd for another org"] },
+            success: false,
+            name,
+            id,
+          };
+        }
       }
-    }
 
-    await prisma.organization.create({
-      data: {
-        ...(id && { id }),
-        name,
-        createdById: session.userId,
-        members: {
-          create: {
-            userId,
-            role: Role.OWNER,
+      const org = await prisma.organization.create({
+        data: {
+          ...(id && { id }),
+          name,
+          createdById: session.userId,
+          members: {
+            create: {
+              userId,
+              role: Role.OWNER,
+            },
           },
         },
-      },
+        select: { id: true },
+      });
+      await prisma.activity.create({
+        data: {
+          organizationId: org.id,
+          description: `${user.name} created the organization`,
+        },
+      });
     });
+
+    if (response) {
+      return response;
+    }
 
     revalidatePath("/home/organizations");
     return { success: true };
