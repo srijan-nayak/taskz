@@ -1,19 +1,14 @@
 import { getUserOrgDetails } from "@/actions/organization";
+import OrgBreadcrumb from "@/components/organization/OrgBreadcrumb";
 import OrgSidebar from "@/components/organization/OrgSidebar";
-import {
-  Breadcrumb,
-  BreadcrumbList,
-  BreadcrumbItem,
-  BreadcrumbPage,
-  BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb";
 import {
   SidebarInset,
   SidebarProvider,
   SidebarTrigger,
 } from "@/components/ui/sidebar";
+import { Skeleton } from "@/components/ui/skeleton";
 import OrganizationPromiseProvider from "@/providers/OrganizationPromiseProvider";
-import { ReactNode } from "react";
+import { ReactNode, Suspense } from "react";
 
 export default async function OrganizationsLayout({
   children,
@@ -33,16 +28,9 @@ export default async function OrganizationsLayout({
           <header className="flex h-14 shrink-0 items-center gap-2">
             <div className="flex flex-1 items-center gap-2 px-3">
               <SidebarTrigger />
-              <Breadcrumb className="border-l-2 ps-4">
-                <BreadcrumbList>
-                  <BreadcrumbItem>
-                    <BreadcrumbPage className="line-clamp-1">
-                      Taskz
-                    </BreadcrumbPage>
-                  </BreadcrumbItem>
-                  <BreadcrumbSeparator />
-                </BreadcrumbList>
-              </Breadcrumb>
+              <Suspense fallback={<Skeleton className="w-56 h-4" />}>
+                <OrgBreadcrumb />
+              </Suspense>
             </div>
           </header>
           <main className="px-3">{children}</main>

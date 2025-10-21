@@ -53,7 +53,7 @@ export default function ProjectsTable({
             <TableRow key={data.id}>
               <TableCell>
                 <Button size="sm" variant="secondary" asChild>
-                  <Link href={`/project/${org?.orgId}/${data.id}/tasks`}>
+                  <Link href={`/project/${org?.orgId}/${data.id}/board`}>
                     {data.name}
                   </Link>
                 </Button>

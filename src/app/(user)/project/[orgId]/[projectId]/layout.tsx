@@ -1,13 +1,7 @@
 import { getUserOrgDetails } from "@/actions/organization";
 import { getProjectDetails } from "@/actions/project";
+import ProjectBreadcrumb from "@/components/project/ProjectBreadcrumb";
 import ProjectSidebar from "@/components/project/ProjectSidebar";
-import {
-  Breadcrumb,
-  BreadcrumbList,
-  BreadcrumbItem,
-  BreadcrumbPage,
-  BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb";
 import {
   SidebarInset,
   SidebarProvider,
@@ -38,16 +32,9 @@ export default async function ProjectLayout({
             <header className="flex h-14 shrink-0 items-center gap-2">
               <div className="flex flex-1 items-center gap-2 px-3">
                 <SidebarTrigger />
-                <Breadcrumb className="border-l-2 ps-4">
-                  <BreadcrumbList>
-                    <BreadcrumbItem>
-                      <BreadcrumbPage className="line-clamp-1">
-                        Taskz
-                      </BreadcrumbPage>
-                    </BreadcrumbItem>
-                    <BreadcrumbSeparator />
-                  </BreadcrumbList>
-                </Breadcrumb>
+                <Suspense fallback={<Skeleton className="w-56 h-4" />}>
+                  <ProjectBreadcrumb />
+                </Suspense>
               </div>
             </header>
             <main className="px-3">

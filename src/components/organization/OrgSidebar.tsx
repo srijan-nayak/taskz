@@ -24,14 +24,14 @@ export default function OrgSidebar() {
 
   const items = [
     {
-      title: "Members",
-      url: "./members",
-      icon: User2,
-    },
-    {
       title: "Projects",
       url: "./projects",
       icon: FolderCode,
+    },
+    {
+      title: "Members",
+      url: "./members",
+      icon: User2,
     },
     {
       title: "Invites",

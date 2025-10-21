@@ -23,14 +23,14 @@ export default function OrgSidebar() {
 
   const items = [
     {
-      title: "Tasks",
-      url: "./tasks",
-      icon: ListTodo,
-    },
-    {
       title: "Board",
       url: "./board",
       icon: Kanban,
+    },
+    {
+      title: "Tasks",
+      url: "./tasks",
+      icon: ListTodo,
     },
   ];
 

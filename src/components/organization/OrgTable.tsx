@@ -45,7 +45,7 @@ export default function OrgTable({
             <TableRow key={data.id}>
               <TableCell>
                 <Button size="sm" variant="secondary" asChild>
-                  <Link href={`/organization/${data.id}/members`}>
+                  <Link href={`/organization/${data.id}/projects`}>
                     {data.name}
                   </Link>
                 </Button>
