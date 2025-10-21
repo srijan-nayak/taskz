@@ -4,8 +4,7 @@ import { TaskStatus } from "@/generated/prisma/enums";
 import { Result } from "@/lib/definitions/generic";
 import { TasksList } from "@/lib/definitions/task";
 import { use } from "react";
-import { Item, ItemTitle } from "../ui/item";
-import TaskBoardColumn from "./TaskBoardColumn";
+import TaskBoardColumn from "@/components/task/TaskBoardColumn";
 
 export default function TaskBoard({
   tasksListPromise,
