@@ -48,7 +48,7 @@ export default function MemberActions({
         <Input hidden name="member-id" type="text" value={memberId} readOnly />
         <Input hidden name="org-id" type="text" value={orgId} readOnly />
         <Button
-          className="cursor-pointer"
+          className="cursor-pointer w-36"
           type="submit"
           disabled={adminPending || memberPending}
           size="sm"

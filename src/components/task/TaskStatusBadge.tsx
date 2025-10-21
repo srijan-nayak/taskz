@@ -4,10 +4,22 @@ import { Badge } from "@/components/ui/badge";
 export default function TaskStatusBadge({ status }: { status: TaskStatus }) {
   switch (status) {
     case TaskStatus.TODO:
-      return <Badge variant="destructive">Todo</Badge>;
+      return (
+        <Badge className="w-20" variant="destructive">
+          Todo
+        </Badge>
+      );
     case TaskStatus.DONE:
-      return <Badge variant="default">Done</Badge>;
+      return (
+        <Badge className="w-20" variant="default">
+          Done
+        </Badge>
+      );
     default:
-      return <Badge variant="secondary">In-progress</Badge>;
+      return (
+        <Badge className="w-20" variant="secondary">
+          In-progress
+        </Badge>
+      );
   }
 }

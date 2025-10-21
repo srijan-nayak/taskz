@@ -41,7 +41,7 @@ export default function UpdateProjectStatus({
             readOnly
           />
           <Button
-            className="cursor-pointer"
+            className="cursor-pointer w-36"
             size="sm"
             variant="secondary"
             disabled={pending}
@@ -61,7 +61,7 @@ export default function UpdateProjectStatus({
             readOnly
           />
           <Button
-            className="cursor-pointer"
+            className="cursor-pointer w-36"
             size="sm"
             variant="default"
             disabled={pending}
@@ -81,7 +81,7 @@ export default function UpdateProjectStatus({
             readOnly
           />
           <Button
-            className="cursor-pointer"
+            className="cursor-pointer w-36"
             size="sm"
             variant="outline"
             disabled={pending}

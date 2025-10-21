@@ -1,13 +1,29 @@
 import { InviteStatus } from "@/generated/prisma/enums";
 import { Badge } from "@/components/ui/badge";
 
-export default function InviteStatusBadge({ status }: { status: InviteStatus }) {
+export default function InviteStatusBadge({
+  status,
+}: {
+  status: InviteStatus;
+}) {
   switch (status) {
     case InviteStatus.REJECTED:
-      return <Badge variant="destructive">Rejected</Badge>;
+      return (
+        <Badge className="w-20" variant="destructive">
+          Rejected
+        </Badge>
+      );
     case InviteStatus.ACCEPTED:
-      return <Badge variant="default">Accepted</Badge>;
+      return (
+        <Badge className="w-20" variant="default">
+          Accepted
+        </Badge>
+      );
     default:
-      return <Badge variant="secondary">Tentative</Badge>;
+      return (
+        <Badge className="w-20" variant="secondary">
+          Tentative
+        </Badge>
+      );
   }
 }
