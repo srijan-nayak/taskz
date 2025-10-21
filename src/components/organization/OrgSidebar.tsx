@@ -11,7 +11,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
-import { FolderCode, Mail, User2 } from "lucide-react";
+import { Activity, FolderCode, Mail, User2 } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import UserLogoutButton from "../auth/UserLogoutButton";
@@ -27,6 +27,11 @@ export default function OrgSidebar() {
       title: "Projects",
       url: "./projects",
       icon: FolderCode,
+    },
+    {
+      title: "Activity",
+      url: "./activity",
+      icon: Activity,
     },
     {
       title: "Members",
