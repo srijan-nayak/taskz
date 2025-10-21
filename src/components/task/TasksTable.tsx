@@ -22,6 +22,7 @@ import {
 import TaskStatusBadge from "@/components/task/TaskStatusBadge";
 import { TasksList } from "@/lib/definitions/task";
 import CreateTask from "@/components/task/CreateTask";
+import UpdateTaskStatus from "./UpdateTaskStatus";
 
 export default function TasksTable({
   tasksListPromise,
@@ -37,6 +38,7 @@ export default function TasksTable({
           <TableRow>
             <TableHead>Task</TableHead>
             <TableHead>Status</TableHead>
+            <TableHead>Update status</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -45,6 +47,9 @@ export default function TasksTable({
               <TableCell> {data.title} </TableCell>
               <TableCell>
                 <TaskStatusBadge status={data.status} />
+              </TableCell>
+              <TableCell>
+                <UpdateTaskStatus taskId={data.id} status={data.status} />
               </TableCell>
             </TableRow>
           ))}

@@ -6,6 +6,7 @@ import {
   TaskFormSchema,
   TaskFormState,
   TasksList,
+  TaskStatusFormSchema,
 } from "@/lib/definitions/task";
 import prisma from "@/lib/prisma";
 import { verifySession } from "@/lib/session";
@@ -105,4 +106,50 @@ export async function createTask(
     };
   }
   redirect(`/organization/${orgId}/projects`);
+}
+
+export async function updateTaskStatus(_state: null, data: FormData) {
+  const session = await verifySession();
+  if (!session) {
+    redirect("/login");
+  }
+  const { userId } = session;
+
+  console.log(data.get("org-id")?.toString());
+  console.log(data.get("project-id")?.toString());
+  console.log(data.get("task-id")?.toString());
+  console.log(data.get("status")?.toString());
+  const validatedFields = TaskStatusFormSchema.safeParse({
+    orgId: data.get("org-id"),
+    projectId: data.get("project-id"),
+    taskId: data.get("task-id"),
+    status: data.get("status"),
+  });
+  if (!validatedFields.success) {
+    return null;
+  }
+
+  const { orgId, projectId, taskId, status } = validatedFields.data;
+
+  const isAuthorized = await isMember(userId, orgId);
+  if (!isAuthorized) {
+    redirect("/home/organizations");
+  }
+
+  try {
+    await prisma.task.update({
+      where: {
+        id: taskId,
+        projectId,
+        project: { organizationId: orgId },
+      },
+      data: { status },
+    });
+
+    revalidatePath(`/project/${orgId}/${projectId}/tasks`);
+  } catch (err) {
+    console.error("Failed to update task status", err);
+  }
+
+  return null;
 }

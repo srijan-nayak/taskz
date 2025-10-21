@@ -29,3 +29,10 @@ export type TaskFormState = {
   title?: string;
   description?: string;
 };
+
+export const TaskStatusFormSchema = z.object({
+  orgId: z.string(),
+  projectId: z.string(),
+  taskId: z.coerce.number(),
+  status: z.enum(TaskStatus),
+});

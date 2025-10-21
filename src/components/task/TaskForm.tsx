@@ -32,10 +32,17 @@ export default function TaskForm({
       <FieldSet>
         <FieldGroup>
           <Field hidden>
-            <Input name="org-id" type="text" defaultValue={orgId} readOnly />
+            <Input
+              hidden
+              name="org-id"
+              type="text"
+              defaultValue={orgId}
+              readOnly
+            />
           </Field>
           <Field hidden>
             <Input
+              hidden
               name="project-id"
               type="text"
               defaultValue={projectId}
