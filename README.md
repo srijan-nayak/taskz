@@ -70,7 +70,7 @@ The application will now be running on [localhost:3000](http://localhost:3000).
 
 Before storing credentials to the database after signup, passwords are combined with a server secret "pepper" and then hashed (with [bcrypt](https://www.npmjs.com/package/bcrypt)). This prevents hash-to-password lookup from rainbow tables, as the hash was not computed with the password directly. On login, the password input is again combined with the secret "pepper" before being compared with the stored hash.
 
-For session management, JSON Web Tokens are signed with a server secret (with [Jose](https://www.npmjs.com/package/jose)), and stored in cookies. Each protected server action verifies the JWT (with other checks described in the next session) before proceeding and redirects the user to the login page (or the app home page depending on the context).
+For session management, JSON Web Tokens are signed with a server secret (with [Jose](https://www.npmjs.com/package/jose)), and stored in cookies. Each protected server action verifies the JWT (with other checks described in the next session) before proceeding and redirects the user to the login page (or the app home page depending on the context) if unauthenticated.
 
 ## Designing with multi-tenancy in mind
 
